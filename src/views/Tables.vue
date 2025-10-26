@@ -1,13 +1,3 @@
-<script setup lang="ts">
-import { useTableData } from '../composables/useTableData'
-
-const {
-  simpleTableData,
-  paginatedTableData,
-  wideTableData,
-} = useTableData()
-</script>
-
 <template>
   <div>
     <h3 class="text-3xl font-medium text-gray-700">
@@ -25,28 +15,26 @@ const {
             <thead class="border-b">
               <tr>
                 <th
+                  v-for="(field, index) in Object.keys(simpleTableData[0] || {})"
+                  :key="index"
                   class="px-5 py-3 text-sm font-medium text-gray-100 uppercase bg-indigo-800"
                 >
-                  City
-                </th>
-                <th
-                  class="px-5 py-3 text-sm font-medium text-gray-100 uppercase bg-indigo-800"
-                >
-                  Total orders
+                  {{ field }}
                 </th>
               </tr>
             </thead>
             <tbody>
               <tr
-                v-for="(i, index) in simpleTableData"
+                v-for="(item, index) in simpleTableData"
                 :key="index"
                 class="hover:bg-gray-200"
               >
-                <td class="px-6 py-4 text-lg text-gray-700 border-b">
-                  {{ i.city }}
-                </td>
-                <td class="px-6 py-4 text-gray-500 border-b">
-                  {{ i.totalOrders }}
+                <td 
+                  v-for="(field, fieldIndex) in Object.keys(item)"
+                  :key="fieldIndex"
+                  class="px-6 py-4 text-lg text-gray-700 border-b"
+                >
+                  {{ item[field] }}
                 </td>
               </tr>
             </tbody>
@@ -345,3 +333,29 @@ const {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+  import { useTableData } from '../composables/useTableData'
+  import { useFirestore } from '../firebase/firestore'
+  import { ref, onMounted } from 'vue'
+
+  // Datos locales para las tablas
+  const simpleTableData: any = ref([])
+  const paginatedTableData = useTableData().paginatedTableData
+  const wideTableData = useTableData().wideTableData
+
+  // Función para cargar los datos de Firestore
+  const loadFirestoreData = async () => {
+    try {
+      const data = await useFirestore.getCollection('prueba');
+      simpleTableData.value = data
+    } catch (error) {
+      console.error('Error al cargar datos de Firestore:', error)
+    }
+  }
+
+  // Cargar datos cuando el componente se monte
+  onMounted(() => {
+    loadFirestoreData()
+  })
+</script>
