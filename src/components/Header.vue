@@ -1,11 +1,3 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-import { useSidebar } from '../composables/useSidebar'
-
-const dropdownOpen = ref(false)
-const { isOpen } = useSidebar()
-</script>
-
 <template>
   <header
     class="flex items-center justify-between px-6 py-4 bg-white border-b-4 border-indigo-600"
@@ -111,6 +103,7 @@ const { isOpen } = useSidebar()
             <router-link
               to="/"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white"
+              @click="handleLogout()"
             >
               Log out
             </router-link>
@@ -120,3 +113,24 @@ const { isOpen } = useSidebar()
     </div>
   </header>
 </template>
+
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import { useSidebar } from '../composables/useSidebar'
+  import { useAuth } from '../firebase/auth'
+  import { useRouter } from 'vue-router'
+
+  const router = useRouter();
+
+  const dropdownOpen = ref(false)
+  const { isOpen } = useSidebar()
+
+  const handleLogout = async () => {
+    try {
+      await useAuth.logout()
+      router.push('/')
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error)
+    }
+  }
+</script>
