@@ -13,7 +13,6 @@ import {
 } from 'firebase/firestore';
 
 export const useFirestore = {
-  // Obtener una colección
   async getCollection(collectionName: string) {
     try {
       const querySnapshot = await getDocs(collection(db, collectionName));
@@ -28,7 +27,6 @@ export const useFirestore = {
     }
   },
 
-  // Obtener un documento específico
   async getDocument(collectionName: string, documentId: string) {
     try {
       const docRef = doc(db, collectionName, documentId);
@@ -45,7 +43,6 @@ export const useFirestore = {
     }
   },
 
-  // Agregar un nuevo documento
   async addDocument(collectionName: string, data: any) {
     try {
       const docRef = await addDoc(collection(db, collectionName), data);
@@ -55,7 +52,6 @@ export const useFirestore = {
     }
   },
 
-  // Actualizar un documento
   async updateDocument(collectionName: string, documentId: string, data: any) {
     try {
       const docRef = doc(db, collectionName, documentId);
@@ -65,7 +61,6 @@ export const useFirestore = {
     }
   },
 
-  // Eliminar un documento
   async deleteDocument(collectionName: string, documentId: string) {
     try {
       const docRef = doc(db, collectionName, documentId);
@@ -75,7 +70,6 @@ export const useFirestore = {
     }
   },
 
-  // Consultar documentos con filtros
   async queryCollection(collectionName: string, ...queryConstraints: QueryConstraint[]) {
     try {
       const q = query(collection(db, collectionName), ...queryConstraints);
