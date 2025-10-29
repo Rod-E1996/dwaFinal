@@ -1,48 +1,44 @@
 <template>
-  <div class="min-h-screen">
+  <div class="min-h-screen bg-gradient-to-b from-blue-50 to-white">
 
-    <!-- CONTENIDO -->
     <div class="container mx-auto pt-28 px-4">
-      <h1 class="text-2xl md:text-3xl text-center font-extrabold text-blue-700 mb-6">
+      <h1 class="text-3xl font-extrabold text-center text-emerald-700 mb-10 tracking-tight">
         Catálogo de Compras
       </h1>
 
-      <div class="bg-white shadow-lg rounded-lg p-6">
-        <h2 class="text-lg font-semibold text-blue-600 mb-4">Productos disponibles</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        <div class="overflow-x-auto">
-          <table class="min-w-full border-collapse text-center">
-            <thead class="bg-gray-200 text-gray-700">
-              <tr>
-                <th class="py-2 px-3">Nombre</th>
-                <th class="py-2 px-3">Cantidad</th>
-                <th class="py-2 px-3">Precio</th>
-                <th class="py-2 px-3">Agregar al carrito</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(producto, index) in productos" :key="index" class="border-b hover:bg-gray-50">
-                <td class="py-2 px-3">{{ producto.nombre }}</td>
-                <td class="py-2 px-3">{{ producto.cantidad }}</td>
-                <td class="py-2 px-3 font-semibold text-green-500">${{ producto.precio }}</td>
-                <td class="py-2 px-3">
-                  <button @click="agregarAlCarrito(producto)"
-                          class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-                    Agregar
-                  </button>
-                </td>
-              </tr>
-              <tr v-if="productos.length === 0">
-                <td colspan="4" class="py-4 text-gray-500">No hay productos disponibles</td>
-              </tr>
-            </tbody>
-          </table>
+        <!-- Tarjetas de producto -->
+        <div v-for="(producto, index) in productos" :key="index"
+             class="bg-white shadow-md rounded-xl p-5 border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition">
+          
+          <h3 class="text-xl font-bold text-emerald-800 mb-1 capitalize">
+            {{ producto.nombre }}
+          </h3>
+          <p class="text-sm text-gray-500 mb-3">Unidades disponibles: 
+            <span class="font-extrabold text-blue-600">{{ producto.cantidad }}</span>
+          </p>
+
+          <p class="text-2xl font-extrabold text-green-500 mb-5">
+            ${{ producto.precio }}
+          </p>
+
+          <button @click="agregarAlCarrito(producto)"
+                  class="inline-flex items-center justify-center border align-middle select-none font-sans font-medium text-center duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed focus:shadow-none text-sm py-2 px-4 shadow-sm hover:shadow-md bg-green-500 hover:bg-success-light relative bg-gradient-to-b from-green-500 to-green-600 border-green-600 text-stone-50 rounded-lg hover:bg-gradient-to-b hover:from-green-600 hover:to-green-600 hover:border-green-600 after:absolute after:inset-0 after:rounded-[inherit] after:box-shadow after:shadow-[inset_0_1px_0px_rgba(255,255,255,0.35),inset_0_-2px_0px_rgba(0,0,0,0.18)] after:pointer-events-none transition antialiased">
+            Agregar al carrito
+          </button>
         </div>
+
+        <div v-if="productos.length === 0" class="col-span-3 text-center py-6 text-gray-500">
+          No hay productos disponibles
+        </div>
+
       </div>
 
-      <!-- Toast / Notificación -->
+      <!-- Toast -->
       <transition name="fade">
-        <div v-if="toastVisible" class="fixed top-20 right-3 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
+        <div v-if="toastVisible"
+             class="fixed top-20 right-6 bg-green-600 text-white px-5 py-3 rounded-lg shadow-xl font-semibold">
           {{ toastMessage }}
         </div>
       </transition>
@@ -69,12 +65,10 @@ export default {
       this.toastMessage = `${producto.nombre} agregado al carrito`;
       this.toastVisible = true;
 
-      // Ocultar toast después de 2 segundos
       setTimeout(() => {
         this.toastVisible = false;
-      }, 2000);
-
-      // Aquí se agregará la lógica real para añadir el producto al carrito
+      }, 2500);
+      
       console.log('Producto agregado:', producto);
     },
   },

@@ -1,59 +1,65 @@
 <template>
-  <footer class="bg-indigo-600 text-white mt-10">
-    <div class="container mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
-
-      <!-- Logo y descripción -->
-      <div class="flex flex-col items-center md:items-start text-center md:text-left">
-        <h2 class="text-2xl font-extrabold mb-2">Supermercados El Económico</h2>
-        <p class="text-gray-200 mb-4">
+<footer class="relative w-full mt-10">
+  <div class="mx-auto w-full max-w-7xl px-8">
+    
+    <div class="grid grid-cols-1 justify-between gap-8 md:grid-cols-2">
+      
+      <!-- Marca y descripción -->
+      <div>
+        <h6 class="font-sans font-bold text-lg lg:text-xl mb-4">
+          Supermercados El Económico
+        </h6>
+        <p class="font-sans mb-4">
           Tu supermercado de confianza. Encuentra los mejores productos a los mejores precios.
         </p>
-        <div class="flex gap-4 justify-center md:justify-start">
-          <!-- Facebook -->
-          <a href="#" class="hover:text-gray-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M8 0C3.582 0 0 3.582 0 8c0 3.993 2.924 7.312 6.75 7.938V10.3H4.898v-2.3h1.852V6.312c0-1.828 1.092-2.828 2.768-2.828.802 0 1.64.144 1.64.144v1.802H10.12c-.943 0-1.237.583-1.237 1.183v1.41h2.1l-.336 2.3H8.883v5.638C12.715 15.312 16 11.993 16 8c0-4.418-3.582-8-8-8z"/>
-            </svg>
-          </a>
-          <!-- Twitter -->
-          <a href="#" class="hover:text-gray-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.009-.422A6.676 6.676 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.084.797 3.286 3.286 0 0 0-5.595 2.993A9.325 9.325 0 0 1 1.114 2.1a3.286 3.286 0 0 0 1.018 4.381A3.323 3.323 0 0 1 .64 6.575v.041a3.284 3.284 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115c-.212 0-.418-.021-.616-.061a3.285 3.285 0 0 0 3.065 2.279A6.588 6.588 0 0 1 .78 13.58 6.32 6.32 0 0 1 0 13.556a9.344 9.344 0 0 0 5.026 1.47"/>
-            </svg>
-          </a>
-          <!-- Instagram -->
-          <a href="#" class="hover:text-gray-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M8 0C5.742 0 5.49.007 4.672.036 3.854.064 3.345.175 2.865.35a4.56 4.56 0 0 0-1.656 1.079A4.56 4.56 0 0 0 .13 3.085c-.175.48-.286.989-.314 1.807C-.007 5.51 0 5.742 0 8s.007 2.49.036 3.308c.028.818.139 1.327.314 1.807.176.48.406.924.71 1.229.305.304.749.534 1.229.71.48.175.989.286 1.807.314.818.028 1.05.036 3.308.036s2.49-.007 3.308-.036c.818-.028 1.327-.139 1.807-.314a4.56 4.56 0 0 0 1.229-.71 4.56 4.56 0 0 0 .71-1.229c.175-.48.286-.989.314-1.807.028-.818.036-1.05.036-3.308s-.007-2.49-.036-3.308c-.028-.818-.139-1.327-.314-1.807a4.56 4.56 0 0 0-.71-1.229A4.56 4.56 0 0 0 13.308.35c-.48-.175-.989-.286-1.807-.314C10.49.007 10.258 0 8 0zm0 1.44c2.22 0 2.483.008 3.358.036.773.027 1.192.124 1.472.206.369.107.63.235.907.512.277.277.405.538.512.907.082.28.179.699.206 1.472.028.875.036 1.138.036 3.358s-.008 2.483-.036 3.358c-.027.773-.124 1.192-.206 1.472a2.602 2.602 0 0 1-.512.907 2.602 2.602 0 0 1-.907.512c-.28.082-.699.179-1.472.206-.875.028-1.138.036-3.358.036s-2.483-.008-3.358-.036c-.773-.027-1.192-.124-1.472-.206a2.602 2.602 0 0 1-.907-.512 2.602 2.602 0 0 1-.512-.907c-.082-.28-.179-.699-.206-1.472C1.448 10.483 1.44 10.22 1.44 8s.008-2.483.036-3.358c.027-.773.124-1.192.206-1.472a2.602 2.602 0 0 1 .512-.907c.277-.277.538-.405.907-.512.28-.082.699-.179 1.472-.206C5.517 1.448 5.78 1.44 8 1.44zM8 3.89a4.11 4.11 0 1 0 0 8.22 4.11 4.11 0 0 0 0-8.22zm0 6.78a2.667 2.667 0 1 1 0-5.334 2.667 2.667 0 0 1 0 5.334zm4.406-7.78a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92z"/>
-            </svg>
-          </a>
-        </div>
       </div>
 
-      <!-- Links rápidos -->
-      <div class="flex flex-col items-center md:items-start text-center md:text-left">
-        <h3 class="text-xl font-extrabold mb-2">Enlaces</h3>
-        <ul class="space-y-2">
-          <li><a href="#" class="hover:text-gray-300 font-medium transition">Inicio</a></li>
-          <li><a href="#" class="hover:text-gray-300 font-medium transition">Productos</a></li>
-          <li><a href="#" class="hover:text-gray-300 font-medium transition">Carrito</a></li>
-          <li><a href="#" class="hover:text-gray-300 font-medium transition">Contacto</a></li>
+      <!-- Secciones -->
+      <div class="grid grid-cols-3 gap-x-6 gap-y-4">
+
+        <!-- Enlaces rápidos -->
+        <ul>
+          <p class="font-semibold text-base mb-2 opacity-80">Enlaces</p>
+          <li><a href="#" class="py-1 hover:text-gray-300 transition">Inicio</a></li>
+          <li><a href="#" class="py-1 hover:text-gray-300 transition">Productos</a></li>
+          <li><a href="#" class="py-1 hover:text-gray-300 transition">Carrito</a></li>
+          <li><a href="#" class="py-1 hover:text-gray-300 transition">Contacto</a></li>
+        </ul>
+
+        <!-- Empresa -->
+        <ul>
+          <p class="font-semibold text-base mb-2 opacity-80">Empresa</p>
+          <li><a href="#" class="py-1 hover:text-gray-300 transition">Sobre nosotros</a></li>
+          <li><a href="#" class="py-1 hover:text-gray-300 transition">Empleos</a></li>
+          <li><a href="#" class="py-1 hover:text-gray-300 transition">Noticias</a></li>
+          <li><a href="#" class="py-1 hover:text-gray-300 transition">Ubicación</a></li>
+        </ul>
+
+        <!-- Contacto -->
+        <ul>
+          <p class="font-semibold text-base mb-2 opacity-80">Contacto</p>
+          <li class="py-2 hover:text-gray-300 transition">soporte@economico.com</li>
+          <li class="text-black-200 py-1 hover:text-gray-300 transition">+503 1234 5678</li>
+          <li class="py-1 hover:text-gray-300 transition" >Santa Tecla, ITCA FEPADE</li>
         </ul>
       </div>
-
-      <!-- Contacto -->
-      <div class="flex flex-col items-center md:items-start text-center md:text-left">
-        <h3 class="text-xl font-extrabold mb-2">Contacto</h3>
-        <p class="text-gray-200 mb-2">Correo: soporte@económico.com</p>
-        <p class="text-gray-200 mb-2">Tel: +503 1234 5678</p>
-        <p class="text-gray-200">Dirección: Edicio F, ITCA FEPADE, Santa Tecla</p>
+    </div>
+    <div class="mt-10 flex w-full flex-col items-center justify-center gap-4 border-t border-stone-200 py-4 md:flex-row md:justify-between">
+      <small class="font-sans antialiased text-sm text-current text-center">© 2025
+        <a href="https://material-tailwind.com/">Supermercados El Económico</a>. All Rights Reserved.</small>
+      <div class="flex gap-1 sm:justify-center">
+        <a href="#" class="inline-grid place-items-center border align-middle select-none font-sans font-medium text-center transition-all duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-sm min-w-[34px] min-h-[34px] rounded-md bg-transparent border-transparent text-stone-800 hover:bg-stone-200/10 hover:border-stone-600/10 shadow-none hover:shadow-none"><svg width="1.5em" height="1.5em" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="currentColor" class="h-4 w-4"><path d="M17 2H14C12.6739 2 11.4021 2.52678 10.4645 3.46447C9.52678 4.40215 9 5.67392 9 7V10H6V14H9V22H13V14H16L17 10H13V7C13 6.73478 13.1054 6.48043 13.2929 6.29289C13.4804 6.10536 13.7348 6 14 6H17V2Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+        <a href="#" class="inline-grid place-items-center border align-middle select-none font-sans font-medium text-center transition-all duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-sm min-w-[34px] min-h-[34px] rounded-md bg-transparent border-transparent text-stone-800 hover:bg-stone-200/10 hover:border-stone-600/10 shadow-none hover:shadow-none"><svg width="1.5em" height="1.5em" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="currentColor" class="h-4 w-4"><path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M3 16V8C3 5.23858 5.23858 3 8 3H16C18.7614 3 21 5.23858 21 8V16C21 18.7614 18.7614 21 16 21H8C5.23858 21 3 18.7614 3 16Z" stroke="currentColor"></path><path d="M17.5 6.51L17.51 6.49889" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+        <a href="#" class="inline-grid place-items-center border align-middle select-none font-sans font-medium text-center transition-all duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-sm min-w-[34px] min-h-[34px] rounded-md bg-transparent border-transparent text-stone-800 hover:bg-stone-200/10 hover:border-stone-600/10 shadow-none hover:shadow-none"><svg width="1.5em" height="1.5em" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="currentColor" class="h-4 w-4"><path d="M16.8198 20.7684L3.75317 3.96836C3.44664 3.57425 3.72749 3 4.22678 3H6.70655C6.8917 3 7.06649 3.08548 7.18016 3.23164L20.2468 20.0316C20.5534 20.4258 20.2725 21 19.7732 21H17.2935C17.1083 21 16.9335 20.9145 16.8198 20.7684Z" stroke="currentColor"></path><path d="M20 3L4 21" stroke="currentColor" stroke-linecap="round"></path></svg>
+        </a>
+        <a href="#" class="inline-grid place-items-center border align-middle select-none font-sans font-medium text-center transition-all duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-sm min-w-[34px] min-h-[34px] rounded-md bg-transparent border-transparent text-stone-800 hover:bg-stone-200/10 hover:border-stone-600/10 shadow-none hover:shadow-none"><svg width="1.5em" height="1.5em" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="currentColor" class="h-4 w-4"><path d="M16 22.0268V19.1568C16.0375 18.68 15.9731 18.2006 15.811 17.7506C15.6489 17.3006 15.3929 16.8902 15.06 16.5468C18.2 16.1968 21.5 15.0068 21.5 9.54679C21.4997 8.15062 20.9627 6.80799 20 5.79679C20.4558 4.5753 20.4236 3.22514 19.91 2.02679C19.91 2.02679 18.73 1.67679 16 3.50679C13.708 2.88561 11.292 2.88561 8.99999 3.50679C6.26999 1.67679 5.08999 2.02679 5.08999 2.02679C4.57636 3.22514 4.54413 4.5753 4.99999 5.79679C4.03011 6.81549 3.49251 8.17026 3.49999 9.57679C3.49999 14.9968 6.79998 16.1868 9.93998 16.5768C9.61098 16.9168 9.35725 17.3222 9.19529 17.7667C9.03334 18.2112 8.96679 18.6849 8.99999 19.1568V22.0268" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M9 20.0267C6 20.9999 3.5 20.0267 2 17.0267" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+        <a href="#" class="inline-grid place-items-center border align-middle select-none font-sans font-medium text-center transition-all duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-sm min-w-[34px] min-h-[34px] rounded-md bg-transparent border-transparent text-stone-800 hover:bg-stone-200/10 hover:border-stone-600/10 shadow-none hover:shadow-none"><svg width="1.5em" height="1.5em" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="currentColor" class="h-4 w-4"><path d="M2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16.6726 20.8435C15.5 14 12.5 8.00003 8.5 2.62964" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M2.06653 10.8406C6.00004 11 15.2829 10.5 19.1415 5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21.9677 12.81C15.3438 10.8407 7.50002 14.0001 5.23145 19.3613" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
       </div>
-
     </div>
-
-    <!-- Derechos -->
-    <div class="border-t border-indigo-500 mt-8 py-4 text-center text-gray-200 text-sm">
-      &copy; 2025 Supermercados El Económico. Todos los derechos reservados.
-    </div>
-  </footer>
+  </div>
+</footer>
 </template>
