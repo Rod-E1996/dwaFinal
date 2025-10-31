@@ -7,6 +7,7 @@ import {
   onAuthStateChanged
 } from 'firebase/auth';
 import type { AuthResponse, StoredAuthData } from '../composables/types';
+import { useFirestore } from './firestore';
 
 export const useAuth = {
   storeAuthData(authData: AuthResponse) {
@@ -87,6 +88,19 @@ export const useAuth = {
         localId: user.uid
       };
       this.storeAuthData(authResponse);
+      // Guardar perfil en Firestore (colección 'users') usando uid como id
+      try {
+        await useFirestore.setDocumentWithId('users', user.uid, {
+          uid: user.uid,
+          email: user.email || null,
+          displayName: (user as any).displayName || null,
+          createdAt: Date.now(),
+          lastLoginAt: Date.now()
+        });
+      } catch (e) {
+        // no detener el flujo por fallo en guardar el perfil
+        console.warn('No se pudo guardar el perfil en Firestore:', e);
+      }
       return user;
     } catch (error) {
       throw error;
@@ -108,6 +122,17 @@ export const useAuth = {
         registered: true
       };
       this.storeAuthData(authResponse);
+      // Actualizar (o crear) perfil en Firestore con fecha de último login
+      try {
+        await useFirestore.setDocumentWithId('users', user.uid, {
+          uid: user.uid,
+          email: user.email || null,
+          displayName: (user as any).displayName || null,
+          lastLoginAt: Date.now()
+        }, true);
+      } catch (e) {
+        console.warn('No se pudo actualizar el perfil en Firestore:', e);
+      }
       return user;
     } catch (error) {
       throw error;

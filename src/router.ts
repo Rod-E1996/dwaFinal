@@ -2,14 +2,12 @@ import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuth } from './firebase/auth'
 
-import Dashboard from './views/Dashboard.vue'
-import Forms from './views/Forms.vue'
-import Tables from './views/Tables.vue'
-import UIElements from './views/UIElements.vue'
 import Login from './views/Login.vue'
-import Modal from './views/Modal.vue'
-import Card from './views/Card.vue'
 import Blank from './views/Blank.vue'
+import Inicio from './views/Admin/inicio.vue'
+import HistorialCompras from './views/Admin/historialCompras.vue'
+import CatalogoAdmin from './views/Admin/catalogoAdmin.vue'
+import UsersList from './views/Admin/usersLIst.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -21,37 +19,25 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: Dashboard,
+    component: Inicio,
     meta: { requiresAuth: true },
   },
   {
-    path: '/forms',
-    name: 'Forms',
-    component: Forms,
+    path: '/history',
+    name: 'BuyingHistory',
+    component: HistorialCompras,
     meta: { requiresAuth: true },
   },
   {
-    path: '/cards',
-    name: 'Cards',
-    component: Card,
+    path: '/catalog',
+    name: 'AdminCatalog',
+    component: CatalogoAdmin,
     meta: { requiresAuth: true },
   },
   {
-    path: '/tables',
-    name: 'Tables',
-    component: Tables,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/ui-elements',
-    name: 'UIElements',
-    component: UIElements,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/modal',
-    name: 'Modal',
-    component: Modal,
+    path: '/users',
+    name: 'UsersList',
+    component: UsersList,
     meta: { requiresAuth: true },
   },
   {

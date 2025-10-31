@@ -23,6 +23,13 @@ export interface IWideTableData {
   role: string
 }
 
+export interface Producto {
+  nombre: string
+  cantidad: number
+  precio: number
+  detalles: string
+}
+
 export function useTableData() {
   const simpleTableData = ref<ISimpleTableData[]>([
     { city: 'New York', totalOrders: '200,120' },

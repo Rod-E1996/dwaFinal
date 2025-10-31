@@ -7,6 +7,7 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
+  setDoc,
   query,
   where,
   QueryConstraint
@@ -16,7 +17,7 @@ export const useFirestore = {
   async getCollection(collectionName: string) {
     try {
       const querySnapshot = await getDocs(collection(db, collectionName));
-        console.log(querySnapshot);
+        // console.log(querySnapshot);
         return querySnapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data()
@@ -65,6 +66,15 @@ export const useFirestore = {
     try {
       const docRef = doc(db, collectionName, documentId);
       await deleteDoc(docRef);
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async setDocumentWithId(collectionName: string, documentId: string, data: any, merge = true) {
+    try {
+      const docRef = doc(db, collectionName, documentId);
+      await setDoc(docRef, data, { merge });
     } catch (error) {
       throw error;
     }

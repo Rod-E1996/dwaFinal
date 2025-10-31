@@ -37,9 +37,10 @@
         </span>
 
         <input
+          v-model="searchQuery"
           class="w-32 pl-10 pr-4 text-indigo-600 border-gray-200 rounded-md sm:w-64 focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500"
           type="text"
-          placeholder="Search"
+          placeholder="Buscar en la página"
         >
       </div>
     </div>
@@ -92,14 +93,14 @@
             v-show="dropdownOpen"
             class="absolute right-0 z-20 w-48 py-2 mt-2 bg-white rounded-md shadow-xl"
           >
-            <a
+            <!-- <a
               href="#"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white"
             >Profile</a>
             <a
               href="#"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white"
-            >Products</a>
+            >Products</a> -->
             <router-link
               to="/"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white"
@@ -119,11 +120,15 @@
   import { useSidebar } from '../composables/useSidebar'
   import { useAuth } from '../firebase/auth'
   import { useRouter } from 'vue-router'
+  import { searchQuery } from '../composables/useSearch'
 
   const router = useRouter();
 
   const dropdownOpen = ref(false)
   const { isOpen } = useSidebar()
+
+  // exponer searchQuery al template (es un ref compartido)
+  const searchQueryRef = searchQuery
 
   const handleLogout = async () => {
     try {

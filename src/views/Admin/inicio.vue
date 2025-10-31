@@ -95,41 +95,41 @@
 
 
 
-<script>
-export default {
-  name: "Home",
+<script setup lang="ts">
+import { ref, computed } from 'vue'
 
-  data() {
-    return {
-      busqueda: "",
-      modalAbierto: false,
-      detalleActivo: "",
+interface Producto {
+  nombre: string
+  cantidad: number
+  precio: number
+  detalles: string
+}
 
-      productos: [
-        { nombre: "Café", cantidad: 12, precio: 3.50, detalles: "Café tostado de El Salvador." },
-        { nombre: "Leche", cantidad: 20, precio: 1.20, detalles: "Leche entera, 1L." },
-        { nombre: "Huevos", cantidad: 30, precio: 2.10, detalles: "Cartón de 12 unidades." }
-      ]
-    }
-  },
+const busqueda = ref('')
+const modalAbierto = ref(false)
+const detalleActivo = ref('')
 
-  computed: {
-    productosFiltrados() {
-      return this.productos.filter(p =>
-        p.nombre.toLowerCase().includes(this.busqueda.toLowerCase())
-      )
-    }
-  },
+const productos = ref<Producto[]>([
+  { nombre: "Café", cantidad: 12, precio: 3.50, detalles: "Café tostado de El Salvador." },
+  { nombre: "Leche", cantidad: 20, precio: 1.20, detalles: "Leche entera, 1L." },
+  { nombre: "Huevos", cantidad: 30, precio: 2.10, detalles: "Cartón de 12 unidades." }
+])
 
-  methods: {
-    verDetalles(producto) {
-      this.detalleActivo = producto.detalles
-      this.modalAbierto = true
-    },
+const productosFiltrados = computed(() => {
+  return productos.value.filter(p =>
+    p.nombre.toLowerCase().includes(busqueda.value.toLowerCase())
+  )
+})
 
-    scrollToInventario() {
-      document.getElementById("inventario").scrollIntoView({ behavior: "smooth" })
-    }
+function verDetalles(producto: Producto) {
+  detalleActivo.value = producto.detalles
+  modalAbierto.value = true
+}
+
+function scrollToInventario() {
+  const element = document.getElementById("inventario")
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth" })
   }
 }
 </script>
