@@ -63,25 +63,46 @@
 </template>
 
 <script>
+import { ref, onMounted, computed } from 'vue'
+import { useFirestore } from '../../firebase/firestore'
+import { searchQuery } from '../../composables/useSearch'
+
 export default {
-  data() {
-    return {
-      historial: [
-        {
-          productos: [
-            { nombre: 'Producto A', cantidad: 2 },
-            { nombre: 'Producto B', cantidad: 1 },
-          ],
-          total: 55
-        },
-        {
-          productos: [
-            { nombre: 'Producto C', cantidad: 3 },
-          ],
-          total: 30
-        },
-      ],
+  setup() {
+    const historialData = ref([]);
+
+    const loadFirestoreData = async () => {
+      try {
+        const data = await useFirestore.getCollection('history');
+        historialData.value = data;
+      } catch (error) {
+        console.error('Error al cargar datos de Firestore:', error);
+      }
     };
-  },
+
+    const historial = computed(() => {
+      const q = (searchQuery.value || '').toString().trim().toLowerCase();
+      if (!q) return historialData.value;
+      
+      return historialData.value.filter(h => {
+        // Search in products array
+        const productosMatch = h.productos.some(p => 
+          p.nombre.toLowerCase().includes(q) || 
+          p.cantidad.toString().toLowerCase().includes(q)
+        );
+        // Search in total
+        const totalMatch = h.total.toString().toLowerCase().includes(q);
+        return productosMatch || totalMatch;
+      });
+    });
+
+    onMounted(() => {
+      loadFirestoreData();
+    });
+
+    return {
+      historial
+    };
+  }
 };
 </script>

@@ -36,7 +36,11 @@
         </div>
       </div>
 
-      <nav class="mt-10">
+      <nav
+        v-if="isAdmin"
+        id="navAdmin"
+        class="mt-10"
+      >
         <router-link
           class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
           :class="[$route.name === 'Dashboard' ? activeClass : inactiveClass]"
@@ -116,6 +120,54 @@
           <span class="mx-4">Usuarios</span>
         </router-link>
       </nav>
+
+      <nav
+        v-if="!isAdmin"
+        id="navUser"
+        class="mt-10"
+      >
+        <router-link
+          class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
+          :class="[$route.name === 'Store' ? activeClass : inactiveClass]"
+          to="/store"
+        >
+          <svg
+            class="w-5 h-5"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M2 10C2 5.58172 5.58172 2 10 2V10H18C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10Z"
+              fill="currentColor"
+            />
+            <path
+              d="M12 2.25195C14.8113 2.97552 17.0245 5.18877 17.748 8.00004H12V2.25195Z"
+              fill="currentColor"
+            />
+          </svg>
+
+          <span class="mx-4">Store</span>
+        </router-link>
+
+        <router-link
+          class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
+          :class="[$route.name === 'Cart' ? activeClass : inactiveClass]"
+          to="/cart"
+        >
+          <svg
+            class="w-5 h-5"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M4.00436 6.41686L0.761719 3.17422L2.17593 1.76001L5.41857 5.00265H20.6603C21.2126 5.00265 21.6603 5.45037 21.6603 6.00265C21.6603 6.09997 21.6461 6.19678 21.6182 6.29L19.2182 14.29C19.0913 14.713 18.7019 15.0027 18.2603 15.0027H6.00436V17.0027H17.0044V19.0027H5.00436C4.45207 19.0027 4.00436 18.5549 4.00436 18.0027V6.41686ZM6.00436 7.00265V13.0027H17.5163L19.3163 7.00265H6.00436ZM5.50436 23.0027C4.67593 23.0027 4.00436 22.3311 4.00436 21.5027C4.00436 20.6742 4.67593 20.0027 5.50436 20.0027C6.33279 20.0027 7.00436 20.6742 7.00436 21.5027C7.00436 22.3311 6.33279 23.0027 5.50436 23.0027ZM17.5044 23.0027C16.6759 23.0027 16.0044 22.3311 16.0044 21.5027C16.0044 20.6742 16.6759 20.0027 17.5044 20.0027C18.3328 20.0027 19.0044 20.6742 19.0044 21.5027C19.0044 22.3311 18.3328 23.0027 17.5044 23.0027Z">
+            </path>
+          </svg>
+
+          <span class="mx-4">Carrito</span>
+        </router-link>
+      </nav>
     </div>
   </div>
 </template>
@@ -124,7 +176,7 @@
 import { ref } from 'vue'
 import { useSidebar } from '../composables/useSidebar'
 
-const { isOpen } = useSidebar()
+const { isOpen, isAdmin } = useSidebar()
 const activeClass = ref(
   'bg-gray-600 bg-opacity-25 text-gray-100 border-gray-100',
 )
