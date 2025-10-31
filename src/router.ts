@@ -7,7 +7,9 @@ import Blank from './views/Blank.vue'
 import Inicio from './views/Admin/inicio.vue'
 import HistorialCompras from './views/Admin/historialCompras.vue'
 import CatalogoAdmin from './views/Admin/catalogoAdmin.vue'
-import UsersList from './views/Admin/usersLIst.vue'
+import UsersList from './views/Admin/usersList.vue'
+import catalogoCompra from './views/User/catalogoCompra.vue'
+import carrito from './views/User/carrito.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -16,34 +18,48 @@ const routes: RouteRecordRaw[] = [
     component: Login,
     meta: { requiresAuth: false, layout: 'empty' },
   },
+  // Dashboard route - only accessible to admin users
   {
     path: '/dashboard',
     name: 'Dashboard',
     component: Inicio,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, requiresAdmin: true },
   },
   {
     path: '/history',
     name: 'BuyingHistory',
     component: HistorialCompras,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, requiresAdmin: true },
   },
   {
     path: '/catalog',
     name: 'AdminCatalog',
     component: CatalogoAdmin,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, requiresAdmin: true },
   },
   {
     path: '/users',
     name: 'UsersList',
     component: UsersList,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, requiresAdmin: true },
   },
   {
     path: '/blank',
     name: 'Blank',
     component: Blank,
+    meta: { requiresAuth: true },
+  },
+  // User routes - only accessible to logged in users
+  {
+    path: '/store',
+    name: 'Store',
+    component: catalogoCompra,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/cart',
+    name: 'Cart',
+    component: carrito,
     meta: { requiresAuth: true },
   },
 ]
@@ -67,11 +83,15 @@ router.beforeEach(async (to, from, next) => {
   }
 
   const requiresAuth = to.meta.requiresAuth as boolean;
+  const requiresAdmin = to.meta.requiresAdmin as boolean;
+  const isAdmin = currentUser?.email === 'rjgespinoza96@gmail.com';
 
   if (requiresAuth && !currentUser) {
     next({ name: 'Login' });
+  } else if (requiresAdmin && !isAdmin) {
+    next({ name: 'Store' });
   } else if (to.name === 'Login' && currentUser) {
-    next({ name: 'Dashboard' });
+    next({ name: isAdmin ? 'Dashboard' : 'Blank' });
   } else {
     next();
   }

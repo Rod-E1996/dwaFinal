@@ -127,7 +127,7 @@
                           </path>
                         </svg>
                       </button>
-                      <!-- <button
+                      <button
                         id="detailProductBtn"
                         class="bg-sky-400 text-white px-2 py-1 rounded hover:bg-sky-500 mr-2 inline-flex items-center justify-center h-[36px] w-[36px]"
                         @click="abrirDetalles(item)"
@@ -141,7 +141,7 @@
                           <path d="M12.0003 3C17.3924 3 21.8784 6.87976 22.8189 12C21.8784 17.1202 17.3924 21 12.0003 21C6.60812 21 2.12215 17.1202 1.18164 12C2.12215 6.87976 6.60812 3 12.0003 3ZM12.0003 19C16.2359 19 19.8603 16.052 20.7777 12C19.8603 7.94803 16.2359 5 12.0003 5C7.7646 5 4.14022 7.94803 3.22278 12C4.14022 16.052 7.7646 19 12.0003 19ZM12.0003 16.5C9.51498 16.5 7.50026 14.4853 7.50026 12C7.50026 9.51472 9.51498 7.5 12.0003 7.5C14.4855 7.5 16.5003 9.51472 16.5003 12C16.5003 14.4853 14.4855 16.5 12.0003 16.5ZM12.0003 14.5C13.381 14.5 14.5003 13.3807 14.5003 12C14.5003 10.6193 13.381 9.5 12.0003 9.5C10.6196 9.5 9.50026 10.6193 9.50026 12C9.50026 13.3807 10.6196 14.5 12.0003 14.5Z">
                           </path>
                         </svg>
-                      </button> -->
+                      </button>
                       <button
                         id="deleteProductBtn"
                         class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 inline-flex items-center justify-center h-[36px] w-[36px]"
@@ -250,6 +250,11 @@
         <input v-model.number="nuevo.precio" type="number" min="0" step="0.01" class="w-full border rounded p-2" required>
       </div>
 
+      <div>
+        <label class="text-gray-700">Detalles</label>
+        <textarea v-model="nuevo.detalles" class="w-full border rounded p-2" rows="3"></textarea>
+      </div>
+
       <div class="flex justify-end gap-2 pt-2">
         <button
           type="button"
@@ -284,6 +289,21 @@
       </div>
     </div>
   </SharedModal>
+  <!-- Modal Ver Detalles -->
+  <SharedModal :show="modalVerDetalles" title="Detalles del producto" @close="modalVerDetalles = false">
+    <div class="p-4">
+      <h3 class="text-lg font-bold text-gray-800 mb-2">
+        Detalles del producto
+      </h3>
+      <div v-if="productoEnDetalle">
+        <div class="mb-2"><b>Nombre:</b> {{ productoEnDetalle.nombre }}</div>
+        <div class="mb-2"><b>Precio:</b> ${{ productoEnDetalle.precio }}</div>
+        <div class="mb-2"><b>Cantidad:</b> {{ productoEnDetalle.cantidad }}</div>
+        <div class="mb-2"><b>Imagen:</b> {{ productoEnDetalle.imagen }}</div>
+        <div class="mb-2"><b>Detalles:</b> {{ productoEnDetalle.detalles }}</div>
+      </div>
+    </div>
+  </SharedModal>
   <!-- Toast de éxito o error -->
   <div class="fixed bottom-4 right-4 z-50">
     <Alerts
@@ -309,8 +329,10 @@
     [key: string]: any;
   }
   const modalConfirmarEliminar = ref(false)
-  const productoAEliminar = ref<FirebaseProduct | null>(null)
   const modalAgregarAbierto = ref(false)
+  const modalVerDetalles = ref(false)
+  const productoAEliminar = ref<FirebaseProduct | null>(null)
+  const productoEnDetalle = ref<FirebaseProduct | null>(null)
   const firebaseProducts = ref<FirebaseProduct[]>([])
   const editingProduct = ref<string | null>(null)
   let loadingData = ref<boolean>(false)
@@ -456,13 +478,13 @@
   }
 
   // carece de sentido esta funcion debido a que todos los detalles son visibles en tabla
-  // function abrirDetalles(producto: FirebaseProduct) {
-  //   productoEditable.value = producto
-  //   modalAbierto.value = true
-  // }
+  function abrirDetalles(producto: FirebaseProduct) {
+    modalVerDetalles.value = true
+    productoEnDetalle.value = producto
+  }
 
   // function guardarDetalles() {
-  //   modalAbierto.value = false
+  //   modalVerDetalles.value = false
   // }
 
   // Variable para guardar el estado original del producto en edición

@@ -9,7 +9,6 @@ import {
   deleteDoc,
   setDoc,
   query,
-  where,
   QueryConstraint
 } from 'firebase/firestore';
 

@@ -15,22 +15,43 @@
             <thead class="text-gray-100 bg-indigo-800">
               <tr>
                 <th class="py-2 px-3">#</th>
-                <th class="py-2 px-3">Usuario</th>
-                <th class="py-2 px-3">Productos</th>
+                <th class="py-2 px-3">email</th>
+                <th class="py-2 px-3">fecha</th>
                 <th class="py-2 px-3">Total</th>
               </tr>
             </thead>
             <tbody>
-              <tr
-                v-if="filteredHistorial.length > 0"
-                v-for="(compra, index) in paginatedHistorial" :key="index" class="border-b hover:bg-gray-50">
-                <td class="py-2 px-3">{{ ((currentPage - 1) * itemsPerPage) + index + 1 }}</td>
-                <td class="py-2 px-3">{{ compra.usuario }}</td>
-                <td class="py-2 px-3">{{ compra.productos }}</td>
-                <td class="py-2 px-3 font-semibold text-green-500">${{ compra.total }}</td>
-              </tr>
-              <tr v-if="filteredHistorial.length === 0">
-                <td colspan="4" class="py-4 text-gray-500">No hay registros</td>
+              <template v-if="!loadingData">
+                <template v-if="filteredHistorial.length > 0">
+                  <tr
+                    v-for="(compra, index) in paginatedHistorial" 
+                    :key="index" 
+                    class="border-b hover:bg-gray-50"
+                  >
+                    <td class="py-2 px-3">{{ ((currentPage - 1) * itemsPerPage) + index + 1 }}</td>
+                    <td class="py-2 px-3">{{ compra.emailUsuario }}</td>
+                    <td class="py-2 px-3">{{ adjustDate(compra.fecha) }}</td>
+                    <td class="py-2 px-3 font-semibold text-green-500">${{ compra.total.toFixed(2) }}</td>
+                  </tr>
+                </template>
+                <tr v-else>
+                  <td colspan="4" class="py-4">
+                    <LoadingAndEmptyState
+                      :loading="false"
+                      empty-message="No se encontraron coincidencias"
+                      class="py-4"
+                    />
+                  </td>
+                </tr>
+              </template>
+              <tr v-else>
+                <td colspan="4" class="py-4">
+                  <LoadingAndEmptyState
+                    :loading="true"
+                    empty-message=""
+                    class="py-4"
+                  />
+                </td>
               </tr>
             </tbody>
           </table>
@@ -80,15 +101,20 @@
 import { ref, onMounted, computed, watch } from 'vue'
 import { useFirestore } from '../../firebase/firestore'
 import { searchQuery } from '../../composables/useSearch'
+import LoadingAndEmptyState from '../../components/LoadingAndEmptyState.vue'
 
 const historialData = ref<any[]>([])
+const loadingData = ref(true)
 
 const loadFirestoreData = async () => {
     try {
-      const data = await useFirestore.getCollection('historial');
+      loadingData.value = true
+      const data = await useFirestore.getCollection('history');
       historialData.value = data
     } catch (error) {
       console.error('Error al cargar datos de Firestore:', error)
+    } finally {
+      loadingData.value = false
     }
   }
 
@@ -126,7 +152,10 @@ function goToPage(page: number) {
 function goToFirstPage() { currentPage.value = 1 }
 function goToLastPage() { currentPage.value = calculateTotalPages.value }
 
-// Asegurar que currentPage siempre sea válido si cambia el tamaño del historial
+function adjustDate(date: number) {
+  return new Date(date).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })
+}
+
 watch(calculateTotalPages, (newVal) => {
   if (currentPage.value > newVal) currentPage.value = newVal || 1
 })
