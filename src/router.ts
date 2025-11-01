@@ -10,6 +10,7 @@ import CatalogoAdmin from './views/Admin/catalogoAdmin.vue'
 import UsersList from './views/Admin/usersList.vue'
 import catalogoCompra from './views/User/catalogoCompra.vue'
 import carrito from './views/User/carrito.vue'
+import historialCompra from './views/User/historialCompra.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -62,6 +63,12 @@ const routes: RouteRecordRaw[] = [
     component: carrito,
     meta: { requiresAuth: true },
   },
+  {
+    path: '/my-orders',
+    name: 'MyOrders',
+    component: historialCompra,
+    meta: { requiresAuth: true }
+  },
 ]
 
 const router = createRouter({
@@ -84,7 +91,7 @@ router.beforeEach(async (to, from, next) => {
 
   const requiresAuth = to.meta.requiresAuth as boolean;
   const requiresAdmin = to.meta.requiresAdmin as boolean;
-  const isAdmin = currentUser?.email === 'rjgespinoza96@gmail.com';
+  const isAdmin = (currentUser?.email === 'rjgespinoza96@gmail.com') || (sessionStorage.getItem('isAdmin') === 'true');
 
   if (requiresAuth && !currentUser) {
     next({ name: 'Login' });
