@@ -95,7 +95,7 @@
 
 // Paginación
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onMounted, computed, watch, onUnmounted } from 'vue'
 import { useFirestore } from '../../firebase/firestore'
 import { searchQuery } from '../../composables/useSearch'
 import LoadingAndEmptyState from '../../components/LoadingAndEmptyState.vue'
@@ -103,23 +103,28 @@ import LoadingAndEmptyState from '../../components/LoadingAndEmptyState.vue'
 const usersData = ref<any[]>([])
 let loadingData = ref<boolean>(false)
 
-const loadUsers = async () => {
+let unsubscribeUsers: (() => void) | null = null
+
+const loadUsers = () => {
     try {
         loadingData.value = true
-        const data = await useFirestore.getCollection('users')
-        if (data.length === 0 || data === null) {
+        unsubscribeUsers = useFirestore.listenCollection('users', (data) => {
+            usersData.value = data
             loadingData.value = false
-            console.log('No hay datos en la colección historial');
-        }
-        usersData.value = data
+        }) as () => void
     } catch (error) {
         console.error('Error al cargar usuarios desde Firestore:', error)
         usersData.value = []
+        loadingData.value = false
     }
 }
 
 onMounted(() => {
     loadUsers()
+})
+
+onUnmounted(() => {
+    if (unsubscribeUsers) unsubscribeUsers()
 })
 
 const currentPage = ref(1)

@@ -326,7 +326,7 @@
 
 <script setup lang="ts">
   import { useFirestore } from '../../firebase/firestore'
-  import { ref, onMounted, computed } from 'vue'
+  import { ref, onMounted, computed, onUnmounted } from 'vue'
   import { Producto, CartItem } from '../../composables/useTableData'
   import SharedModal from '../../components/SharedModal.vue'
   import Alerts from '../../components/Alerts.vue'
@@ -405,22 +405,27 @@
     detalles: ''
   })
 
-  const loadFirestoreData = async () => {
+  let unsubscribeProductos: (() => void) | null = null
+
+  const loadFirestoreData = () => {
     try {
       loadingData.value = true
-      const data = await useFirestore.getCollection('productos');
-      if (data.length === 0 || data === null) {
+      unsubscribeProductos = useFirestore.listenCollection('productos', (data) => {
+        firebaseProducts.value = data
         loadingData.value = false
-        console.log('No hay datos en la colección historial');
-      }
-      firebaseProducts.value = data
+      }) as () => void
     } catch (error) {
       console.error('Error al cargar datos de Firestore:', error)
+      loadingData.value = false
     }
   }
 
   onMounted(() => {
     loadFirestoreData()
+  })
+
+  onUnmounted(() => {
+    if (unsubscribeProductos) unsubscribeProductos()
   })
 
   async function insertNewProduct() {
@@ -432,8 +437,7 @@
         precio: 0,
         detalles: ''
       }
-      modalAgregarAbierto.value = false
-      loadFirestoreData()
+  modalAgregarAbierto.value = false
       showToast({
         title: 'Hecho!',
         message: 'Producto agregado correctamente.',

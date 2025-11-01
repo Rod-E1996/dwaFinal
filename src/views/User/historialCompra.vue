@@ -121,7 +121,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onMounted, computed, watch, onUnmounted } from 'vue'
 import { useFirestore } from '../../firebase/firestore'
 import { searchQuery } from '../../composables/useSearch'
 import LoadingAndEmptyState from '../../components/LoadingAndEmptyState.vue'
@@ -131,6 +131,7 @@ import * as XLSX from 'xlsx'
 
 const historialData = ref<any[]>([])
 const loadingData = ref(true)
+let unsubscribeHistory: (() => void) | null = null
 
 const loadFirestoreData = async () => {
     try {
@@ -145,21 +146,28 @@ const loadFirestoreData = async () => {
       if (!currentUser || !currentUser.email) {
         // no user -> no history
         historialData.value = []
+        loadingData.value = false
         return
       }
 
-      // Query only the history documents that belong to the current user
-      const data = await useFirestore.queryCollection('history', where('emailUsuario', '==', currentUser.email))
-      historialData.value = data || []
+      // Listen only the history documents that belong to the current user
+      if (unsubscribeHistory) unsubscribeHistory()
+      unsubscribeHistory = useFirestore.listenQueryCollection('history', (data) => {
+        historialData.value = data || []
+        loadingData.value = false
+      }, where('emailUsuario', '==', currentUser.email)) as () => void
     } catch (error) {
       console.error('Error al cargar datos de Firestore:', error)
-    } finally {
       loadingData.value = false
     }
   }
 
   onMounted(() => {
     loadFirestoreData()
+  })
+
+  onUnmounted(() => {
+    if (unsubscribeHistory) unsubscribeHistory()
   })
 
 // Paginación

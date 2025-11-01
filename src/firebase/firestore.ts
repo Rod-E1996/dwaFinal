@@ -9,7 +9,10 @@ import {
   deleteDoc,
   setDoc,
   query,
-  QueryConstraint
+  onSnapshot,
+  QueryConstraint,
+  DocumentReference,
+  Query
 } from 'firebase/firestore';
 
 export const useFirestore = {
@@ -27,6 +30,40 @@ export const useFirestore = {
     }
   },
 
+  // Escucha en tiempo real una colección completa
+  listenCollection(collectionName: string, callback: (docs: any[]) => void) {
+    try {
+      const colRef = collection(db, collectionName);
+      const unsub = onSnapshot(colRef, (querySnapshot) => {
+        const data = querySnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        callback(data);
+      }, (err) => {
+        console.error('Error en listener colección:', err);
+      });
+      return unsub;
+    } catch (error) {
+      console.error('listenCollection error:', error);
+      throw error;
+    }
+  },
+
+  // Escucha en tiempo real una consulta (con constraints)
+  listenQueryCollection(collectionName: string, callback: (docs: any[]) => void, ...queryConstraints: QueryConstraint[]) {
+    try {
+      const q = query(collection(db, collectionName), ...queryConstraints) as Query;
+      const unsub = onSnapshot(q, (querySnapshot) => {
+        const data = querySnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        callback(data);
+      }, (err) => {
+        console.error('Error en listener query:', err);
+      });
+      return unsub;
+    } catch (error) {
+      console.error('listenQueryCollection error:', error);
+      throw error;
+    }
+  },
+
   async getDocument(collectionName: string, documentId: string) {
     try {
       const docRef = doc(db, collectionName, documentId);
@@ -39,6 +76,22 @@ export const useFirestore = {
       }
       return null;
     } catch (error) {
+      throw error;
+    }
+  },
+
+  // Escucha en tiempo real un documento específico
+  listenDocument(collectionName: string, documentId: string, callback: (doc: any | null) => void) {
+    try {
+      const docRef = doc(db, collectionName, documentId) as DocumentReference;
+      const unsub = onSnapshot(docRef, (docSnap) => {
+        callback(docSnap.exists() ? { id: docSnap.id, ...docSnap.data() } : null);
+      }, (err) => {
+        console.error('Error en listener documento:', err);
+      });
+      return unsub;
+    } catch (error) {
+      console.error('listenDocument error:', error);
       throw error;
     }
   },
