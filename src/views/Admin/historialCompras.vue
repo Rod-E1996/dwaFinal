@@ -121,7 +121,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onMounted, computed, watch, onUnmounted } from 'vue'
 import { useFirestore } from '../../firebase/firestore'
 import { searchQuery } from '../../composables/useSearch'
 import LoadingAndEmptyState from '../../components/LoadingAndEmptyState.vue'
@@ -130,20 +130,28 @@ import * as XLSX from 'xlsx'
 const historialData = ref<any[]>([])
 const loadingData = ref(true)
 
-const loadFirestoreData = async () => {
+const unsubscribeHistory: (() => void) | null = null
+let _unsubscribeHistory: (() => void) | null = null
+
+const loadFirestoreData = () => {
     try {
       loadingData.value = true
-      const data = await useFirestore.getCollection('history');
-      historialData.value = data
+      _unsubscribeHistory = useFirestore.listenCollection('history', (data) => {
+        historialData.value = data
+        loadingData.value = false
+      }) as () => void
     } catch (error) {
       console.error('Error al cargar datos de Firestore:', error)
-    } finally {
       loadingData.value = false
     }
   }
 
   onMounted(() => {
     loadFirestoreData()
+  })
+
+  onUnmounted(() => {
+    if (_unsubscribeHistory) _unsubscribeHistory()
   })
 
 // Paginación
