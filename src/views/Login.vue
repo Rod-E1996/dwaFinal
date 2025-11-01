@@ -21,7 +21,7 @@
             fill="white"
           />
         </svg>
-        <span class="text-2xl font-semibold text-gray-700">V-Dashboard</span>
+        <span class="text-2xl font-semibold text-gray-700">V-Market</span>
       </div>
 
       <form class="mt-4" @submit.prevent="login">
@@ -110,6 +110,13 @@
         localStorage.setItem('rememberedEmail', email.value)
       } else {
         localStorage.removeItem('rememberedEmail')
+      }
+
+      // Persist admin flag in sessionStorage for faster checks on reloads
+      if (email.value === 'rjgespinoza96@gmail.com') {
+        sessionStorage.setItem('isAdmin', 'true')
+      } else {
+        sessionStorage.removeItem('isAdmin')
       }
 
       router.push('/dashboard')

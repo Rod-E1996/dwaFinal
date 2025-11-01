@@ -5,4 +5,5 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   base: '/dwaFinal/',
   plugins: [vue()],
+  base: '/', // Nombre de tu repositorio
 })

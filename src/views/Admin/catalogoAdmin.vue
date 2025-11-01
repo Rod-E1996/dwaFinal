@@ -292,15 +292,11 @@
   <!-- Modal Ver Detalles -->
   <SharedModal :show="modalVerDetalles" title="Detalles del producto" @close="modalVerDetalles = false">
     <div class="p-4">
-      <h3 class="text-lg font-bold text-gray-800 mb-2">
-        Detalles del producto
-      </h3>
       <div v-if="productoEnDetalle">
-        <div class="mb-2"><b>Nombre:</b> {{ productoEnDetalle.nombre }}</div>
-        <div class="mb-2"><b>Precio:</b> ${{ productoEnDetalle.precio }}</div>
-        <div class="mb-2"><b>Cantidad:</b> {{ productoEnDetalle.cantidad }}</div>
-        <div class="mb-2"><b>Imagen:</b> {{ productoEnDetalle.imagen }}</div>
-        <div class="mb-2"><b>Detalles:</b> {{ productoEnDetalle.detalles }}</div>
+        <div v-if="productoEnDetalle.detalles" class="mb-2">{{ productoEnDetalle.detalles }}</div>
+        <div v-else>
+          Descripcion no disponible
+        </div>
       </div>
     </div>
   </SharedModal>
@@ -317,7 +313,7 @@
 
 <script setup lang="ts">
   import { useFirestore } from '../../firebase/firestore'
-  import { ref, onMounted, computed } from 'vue'
+  import { ref, onMounted, computed, onUnmounted } from 'vue'
   import { Producto } from '../../composables/useTableData'
   import SharedModal from '../../components/SharedModal.vue'
   import Alerts from '../../components/Alerts.vue'
@@ -392,22 +388,28 @@
     detalles: ''
   })
 
-  const loadFirestoreData = async () => {
+  let unsubscribeProductos: (() => void) | null = null
+
+  const loadFirestoreData = () => {
     try {
       loadingData.value = true
-      const data = await useFirestore.getCollection('productos');
-      if (data.length === 0 || data === null) {
+      // usar listener en tiempo real
+      unsubscribeProductos = useFirestore.listenCollection('productos', (data) => {
+        firebaseProducts.value = data
         loadingData.value = false
-        console.log('No hay datos en la colección historial');
-      }
-      firebaseProducts.value = data
+      }) as () => void
     } catch (error) {
       console.error('Error al cargar datos de Firestore:', error)
+      loadingData.value = false
     }
   }
 
   onMounted(() => {
     loadFirestoreData()
+  })
+
+  onUnmounted(() => {
+    if (unsubscribeProductos) unsubscribeProductos()
   })
 
   async function insertNewProduct() {
@@ -419,8 +421,7 @@
         precio: 0,
         detalles: ''
       }
-      modalAgregarAbierto.value = false
-      loadFirestoreData()
+  modalAgregarAbierto.value = false
       showToast({
         title: 'Hecho!',
         message: 'Producto agregado correctamente.',
@@ -448,10 +449,7 @@
     if (!productoAEliminar.value) return
     try {
       await useFirestore.deleteDocument('productos', productoAEliminar.value.id)
-      // Eliminar del array local
-      const idx = firebaseProducts.value.findIndex(p => p.id === productoAEliminar?.value?.id)
-      if (idx !== -1) firebaseProducts.value.splice(idx, 1)
-      await loadFirestoreData()
+  // El array se actualizará automáticamente por el listener
       showToast({
         title: 'Hecho!',
         message: 'Producto eliminado correctamente.',
@@ -510,9 +508,8 @@
   async function guardarCambios(producto: FirebaseProduct) {
     try {
       await useFirestore.updateDocument('productos', producto.id, producto)
-      editingProduct.value = null
-      productoOriginal = null
-      await loadFirestoreData()
+  editingProduct.value = null
+  productoOriginal = null
       showToast({
         title: 'Hecho!',
         message: 'Producto actualizado correctamente.',

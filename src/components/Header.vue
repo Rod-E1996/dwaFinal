@@ -93,14 +93,9 @@
             v-show="dropdownOpen"
             class="absolute right-0 z-20 w-48 py-2 mt-2 bg-white rounded-md shadow-xl"
           >
-            <!-- <a
-              href="#"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white"
-            >Profile</a>
-            <a
-              href="#"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white"
-            >Products</a> -->
+            <p
+              class="block px-4 py-2 text-sm text-gray-700"
+            >{{ currentUser!.email }}</p>
             <router-link
               to="/"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white"
@@ -129,10 +124,13 @@
 
   // exponer searchQuery al template (es un ref compartido)
   const searchQueryRef = searchQuery
+  const currentUser = localStorage.getItem('authData') ? JSON.parse(localStorage.getItem('authData') as string) : null
 
   const handleLogout = async () => {
     try {
       await useAuth.logout()
+      // clear persisted admin flag
+      sessionStorage.removeItem('isAdmin')
       router.push('/')
     } catch (error) {
       console.error('Error al cerrar sesión:', error)
