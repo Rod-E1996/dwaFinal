@@ -292,15 +292,11 @@
   <!-- Modal Ver Detalles -->
   <SharedModal :show="modalVerDetalles" title="Detalles del producto" @close="modalVerDetalles = false">
     <div class="p-4">
-      <h3 class="text-lg font-bold text-gray-800 mb-2">
-        Detalles del producto
-      </h3>
       <div v-if="productoEnDetalle">
-        <div class="mb-2"><b>Nombre:</b> {{ productoEnDetalle.nombre }}</div>
-        <div class="mb-2"><b>Precio:</b> ${{ productoEnDetalle.precio }}</div>
-        <div class="mb-2"><b>Cantidad:</b> {{ productoEnDetalle.cantidad }}</div>
-        <div class="mb-2"><b>Imagen:</b> {{ productoEnDetalle.imagen }}</div>
-        <div class="mb-2"><b>Detalles:</b> {{ productoEnDetalle.detalles }}</div>
+        <div v-if="productoEnDetalle.detalles" class="mb-2">{{ productoEnDetalle.detalles }}</div>
+        <div v-else>
+          Descripcion no disponible
+        </div>
       </div>
     </div>
   </SharedModal>
