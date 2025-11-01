@@ -40,3 +40,48 @@ export interface CartItem {
     fechaAgregado: number;
   }>;
 }
+
+export function useTableData() {
+  const paginatedTableData: IPaginatedTableData[] = [
+    {
+      picture: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+      name: 'Jane Cooper',
+      role: 'Admin',
+      created: 'Jan 12, 2021',
+      status: 'Active',
+      statusColor: 'green',
+    },
+    {
+      picture: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+      name: 'John Doe',
+      role: 'User',
+      created: 'Feb 5, 2021',
+      status: 'Inactive',
+      statusColor: 'red',
+    },
+  ];
+
+  const wideTableData: IWideTableData[] = [
+    {
+      name: 'Jane Cooper',
+      email: 'jane.cooper@example.com',
+      title: 'Regional Paradigm Technician',
+      title2: 'Optimization',
+      status: 'Active',
+      role: 'Admin',
+    },
+    {
+      name: 'Cody Fisher',
+      email: 'cody.fisher@example.com',
+      title: 'Product Directives Officer',
+      title2: 'Intranet',
+      status: 'Active',
+      role: 'Owner',
+    },
+  ];
+
+  return {
+    paginatedTableData,
+    wideTableData,
+  };
+}
