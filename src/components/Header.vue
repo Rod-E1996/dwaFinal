@@ -95,7 +95,7 @@
           >
             <p
               class="block px-4 py-2 text-sm text-gray-700"
-            >{{ currentUser!.email }}</p>
+            >{{ currentUser?.email || '' }}</p>
             <router-link
               to="/"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white"
@@ -111,7 +111,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, onMounted } from 'vue'
   import { useSidebar } from '../composables/useSidebar'
   import { useAuth } from '../firebase/auth'
   import { useRouter } from 'vue-router'
@@ -124,7 +124,34 @@
 
   // exponer searchQuery al template (es un ref compartido)
   const searchQueryRef = searchQuery
-  const currentUser = localStorage.getItem('authData') ? JSON.parse(localStorage.getItem('authData') as string) : null
+
+  // currentUser será reactivo y se actualizará con el estado de auth
+  const currentUser = ref<any | null>(null)
+
+  onMounted(() => {
+    // Intentar cargar datos persistidos primero
+    const stored = localStorage.getItem('authData')
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored)
+        currentUser.value = { email: parsed.email, uid: parsed.localId }
+      } catch (e) {
+        currentUser.value = null
+      }
+    }
+
+    // Si ya hay un usuario en el SDK, úsalo (más fiable)
+    const sdkUser = useAuth.getCurrentUser()
+    if (sdkUser) {
+      currentUser.value = { email: sdkUser.email, uid: sdkUser.uid }
+    }
+
+    // Suscribirnos a cambios de auth para mantener el header actualizado
+    useAuth.onAuthStateChange((u) => {
+      if (u) currentUser.value = { email: u.email, uid: u.uid }
+      else currentUser.value = null
+    })
+  })
 
   const handleLogout = async () => {
     try {
